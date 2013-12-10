@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "net/http"
+    "flag"
     "crypto/md5"
     "encoding/base64"
     "github.com/mssola/user_agent"
@@ -33,6 +34,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+    port := flag.Int("port", 8080, "Port to use")
+    address := flag.String("address", "", "Address to bind")
+
+    flag.Parse()
+
+    socket := fmt.Sprint(*address, ":", *port)
+    fmt.Printf("Bind to %s", socket)
     http.HandleFunc("/", handler)
-    http.ListenAndServe(":8080", nil)
+    http.ListenAndServe(socket , nil)
 }
