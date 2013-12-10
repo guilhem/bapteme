@@ -9,6 +9,7 @@ import (
     "encoding/base64"
     "github.com/mssola/user_agent"
     "github.com/dchest/uniuri"
+    "github.com/op/go-logging"
 )
 
 var Size int
@@ -38,14 +39,14 @@ func hashName(id string) string {
     return base64.URLEncoding.EncodeToString([]byte(id))
 }
 
-func handler(w http.ResponseWriter, r *http.Request, size int) {
+func handler(w http.ResponseWriter, r *http.Request) {
     id := r.FormValue("id")
 
     tmpsize := r.FormValue("size")
 
     if len(tmpsize) != 0 {
       s, err := strconv.Atoi(tmpsize)
-      size = s
+      *size = s
       if err != nil {
         fmt.Println(err)
         return
@@ -53,32 +54,47 @@ func handler(w http.ResponseWriter, r *http.Request, size int) {
     }
 
     prefix := prefix(r)
+    log.Debug("Prefix = %s", prefix)
     var suffix string
     if len(id) != 0 {
       ts := hashName(id)
-      if len(ts) >= size-3 {
-        suffix = ts[0:size-3]
+      if len(ts) >= *size-3 {
+        suffix = ts[0:*size-3]
       } else {
         suffix = ts
       }
     } else {
-      suffix = randomName(size-3)
+      suffix = randomName(*size-3)
     }
+    log.Debug("Suffix = %s", suffix)
+
     name := strings.Join([]string{ prefix, suffix},"")
     fmt.Fprintf(w, "%s", name)
 }
 
-func main() {
-    port := flag.Int("port", 8080, "Port to use")
-    address := flag.String("address", "", "Address to bind")
-    size := flag.Int("size", 10, "Default final hostname size")
+var port    = flag.Int("port", 8080, "Port to use")
+var address = flag.String("address", "", "Address to bind")
+var size    = flag.Int("size", 10, "Default final hostname size")
+var debug   = flag.Bool("d", false,"turn on debug info")
 
+var log = logging.MustGetLogger("bapteme")
+
+func main() {
     flag.Parse()
+    var format = logging.MustStringFormatter("%{level} %{message}")
+    logging.SetFormatter(format)
+    if *debug {
+      logging.SetLevel(logging.DEBUG, "bapteme")
+    } else {
+      logging.SetLevel(logging.INFO, "bapteme")
+    }
 
     socket := fmt.Sprint(*address, ":", *port)
-    fmt.Printf("Bind to %s", socket)
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-              handler(w, r, *size)
-       })
+    log.Info("Bind to %s", socket)
+
+    http.HandleFunc("/", handler)
+//    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+//              handler(w, r, *size)
+//       })
     http.ListenAndServe(socket , nil)
 }
