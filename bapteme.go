@@ -55,7 +55,12 @@ func handler(w http.ResponseWriter, r *http.Request, size int) {
     prefix := prefix(r)
     var suffix string
     if len(id) != 0 {
-      suffix = hashName(id)[0:size-3]
+      ts := hashName(id)
+      if len(ts) >= size-3 {
+        suffix = ts[0:size-3]
+      } else {
+        suffix = ts
+      }
     } else {
       suffix = randomName(size-3)
     }
