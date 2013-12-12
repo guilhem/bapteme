@@ -19,13 +19,15 @@ func prefix(r *http.Request) string {
     ua.Parse(r.UserAgent())
 
     os := ua.OS()
+    var ret string
     if strings.Contains(os, "Linux") {
-        return "lin"
+        ret = "lin"
     } else if strings.Contains(os, "Windows") {
-        return "win"
+        ret = "win"
     } else {
-        return "srv"
+        ret = "srv"
     }
+    return ret
 }
 
 func randomName(length int) string {
