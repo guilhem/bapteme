@@ -4,8 +4,10 @@ Priority: extra
 Maintainer: Guilhem Lettron <guilhem.lettron@optiflows.com>
 Build-Depends: debhelper (>= 8.0.0),
                dh-golang,
-               golang-go
-#               golang-godebiancontrol-dev,
+               golang-go,
+               golang-user-agent-dev,
+               golang-logging-dev,
+               golang-uniuri-dev
 Standards-Version: 3.9.2
 #Vcs-Git: https://github.com/optiflows/bapteme.git
 #Vcs-Browser: https://github.com/optiflows/bapteme
