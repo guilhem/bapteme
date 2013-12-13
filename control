@@ -15,6 +15,5 @@ Standards-Version: 3.9.2
 Package: bapteme
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Built-Using: ${misc:Built-Using}
 Description: Bapteme package
  Tool to baptize a server.
