@@ -27,6 +27,7 @@ func prefix(r *http.Request) string {
     } else {
         ret = "srv"
     }
+    
     return ret
 }
 
@@ -55,22 +56,38 @@ func handler(w http.ResponseWriter, r *http.Request) {
       }
     }
 
-    prefix := prefix(r)
-    log.Debug("Prefix = %s", prefix)
+    var name string
+
+    pre := r.FormValue("prefix")
+    if len(pre) != 0 {
+      name = pre
+    } else {
+      name = prefix(r)
+    }
+    log.Debug("Prefix = %s", name)
+
+    instance := r.FormValue("instance")
+
+    name = strings.Join([]string{name, instance},"")
+    if len(name) >= *size {
+      http.Error(w, "instance too long", 500)
+      return
+    }
+
     var suffix string
     if len(id) != 0 {
       ts := hashName(id)
-      if len(ts) >= *size-3 {
-        suffix = ts[0:*size-3]
+      if len(ts) >= *size-len(name) {
+        suffix = ts[0:*size-len(name)]
       } else {
         suffix = ts
       }
     } else {
-      suffix = randomName(*size-3)
+      suffix = randomName(*size-len(name))
     }
     log.Debug("Suffix = %s", suffix)
+    name = strings.Join([]string{ name, suffix},"")
 
-    name := strings.Join([]string{ prefix, suffix},"")
     fmt.Fprintf(w, "%s", name)
 }
 
