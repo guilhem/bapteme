@@ -1,3 +1,7 @@
 # Whether the daemon should be started at boot time.
 # Set to 1 to start.
 ENABLED=0
+
+#PORT=8080
+#ADDRESS=0.0.0.0
+#SIZE=10

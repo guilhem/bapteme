@@ -14,4 +14,12 @@ pre-start script
 	[ "$ENABLED" = "1" ] || { stop; exit 0; }
 end script
 
-exec bapteme
+script
+	[ -f /etc/default/$UPSTART_JOB ] && . /etc/default/$UPSTART_JOB
+
+	[ -n "$PORT" ] && OPTIONS="$OPTIONS --port $PORT"
+	[ -n "$ADDRESS" ] && OPTIONS="$OPTIONS --address $ADDRESS"
+	[ -n "$SIZE" ] && OPTIONS="$OPTIONS --size $SIZE"
+
+	exec bapteme $OPTIONS
+end script
