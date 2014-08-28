@@ -71,7 +71,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	name = strings.Join([]string{name, instance}, "")
 	if len(name) >= size {
-		http.Error(w, "instance too long", 500)
+		http.Error(w, "name too long", 500)
 		return
 	}
 
