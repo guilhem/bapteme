@@ -62,3 +62,16 @@ name too long
 # HTTP 500
 # len(AZERTY) >> 2
 ```
+
+## Dev
+
+We are using [`gopm`](https://github.com/gpmgo/gopm) tool to manage vendoring.
+
+Just compile / [download](http://gobuild.io/download/github.com/gpmgo/gopm) gopm.
+
+### Build
+
+```shell
+$ gopm build
+```
+That's all folks!
