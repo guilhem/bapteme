@@ -38,6 +38,7 @@ Usage of ./bapteme:
 ### Server
 ```shell
 $ ./bapteme -bind="127.0.0.1:8086" -size="15"
+2014/08/28 16:32:41 INFO Bind to 127.0.0.1:8086
 ```
 
 ### Client
