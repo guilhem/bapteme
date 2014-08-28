@@ -12,8 +12,6 @@ import (
 	"strings"
 )
 
-var Size int
-
 func prefix(r *http.Request) string {
 	ua := new(user_agent.UserAgent)
 	ua.Parse(r.UserAgent())
@@ -45,16 +43,19 @@ func hashName(id string) string {
 func handler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 
-	tmpsize := r.FormValue("size")
+  var err error
+  var size int
+	formSize := r.FormValue("size")
 
-	if len(tmpsize) != 0 {
-		s, err := strconv.Atoi(tmpsize)
-		*size = s
+	if formSize != "" {
+		size , err = strconv.Atoi(formSize)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-	}
+	} else {
+    size = *flagSize
+  }
 
 	var name string
 
@@ -69,7 +70,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	instance := r.FormValue("instance")
 
 	name = strings.Join([]string{name, instance}, "")
-	if len(name) >= *size {
+	if len(name) >= size {
 		http.Error(w, "instance too long", 500)
 		return
 	}
@@ -77,13 +78,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	var suffix string
 	if len(id) != 0 {
 		ts := hashName(id)
-		if len(ts) >= *size-len(name) {
-			suffix = ts[0 : *size-len(name)]
+		if len(ts) >= size-len(name) {
+			suffix = ts[0 : size-len(name)]
 		} else {
 			suffix = ts
 		}
 	} else {
-		suffix = randomName(*size - len(name))
+		suffix = randomName(size - len(name))
 	}
 	log.Debug("Suffix = %s", suffix)
 	name = strings.Join([]string{name, suffix}, "")
@@ -91,9 +92,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", name)
 }
 
-var bind = flag.String("bind", "", "Address to bind. Format IP:PORT")
-var size = flag.Int("size", 10, "Default final hostname size")
-var debug = flag.Bool("d", false, "turn on debug info")
+var (
+  flagBind = flag.String("bind", "", "Address to bind. Format IP:PORT")
+  flagSize = flag.Int("size", 10, "Default final hostname size")
+  flagDebug = flag.Bool("d", false, "turn on debug info")
+)
 
 var log = logging.MustGetLogger("bapteme")
 
@@ -101,17 +104,17 @@ func main() {
 	flag.Parse()
 	var format = logging.MustStringFormatter("%{level} %{message}")
 	logging.SetFormatter(format)
-	if *debug {
+	if *flagDebug {
 		logging.SetLevel(logging.DEBUG, "bapteme")
 	} else {
 		logging.SetLevel(logging.INFO, "bapteme")
 	}
 
-	log.Info("Bind to %s", *bind)
+	log.Info("Bind to %s", *flagBind)
 
 	http.HandleFunc("/", handler)
 	//    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	//              handler(w, r, *size)
 	//       })
-	http.ListenAndServe(*bind, nil)
+	http.ListenAndServe(*flagBind, nil)
 }
