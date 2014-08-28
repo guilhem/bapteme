@@ -91,8 +91,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", name)
 }
 
-var port = flag.Int("port", 8080, "Port to use")
-var address = flag.String("address", "", "Address to bind")
+var address = flag.String("address", "", "Address to bind. Format IP:PORT")
 var size = flag.Int("size", 10, "Default final hostname size")
 var debug = flag.Bool("d", false, "turn on debug info")
 
@@ -108,12 +107,11 @@ func main() {
 		logging.SetLevel(logging.INFO, "bapteme")
 	}
 
-	socket := fmt.Sprint(*address, ":", *port)
-	log.Info("Bind to %s", socket)
+	log.Info("Bind to %s", *address)
 
 	http.HandleFunc("/", handler)
 	//    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	//              handler(w, r, *size)
 	//       })
-	http.ListenAndServe(socket, nil)
+	http.ListenAndServe(*address, nil)
 }
