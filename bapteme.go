@@ -4,12 +4,13 @@ import (
 	"encoding/base64"
 	"flag"
 	"fmt"
-	"github.com/dchest/uniuri"
-	"github.com/mssola/user_agent"
-	"github.com/op/go-logging"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/dchest/uniuri"
+	"github.com/mssola/user_agent"
+	"github.com/op/go-logging"
 )
 
 func prefix(r *http.Request) string {
@@ -43,19 +44,19 @@ func hashName(id string) string {
 func handler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 
-  var err error
-  var size int
+	var err error
+	var size int
 	formSize := r.FormValue("size")
 
 	if formSize != "" {
-		size , err = strconv.Atoi(formSize)
+		size, err = strconv.Atoi(formSize)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 	} else {
-    size = *flagSize
-  }
+		size = *flagSize
+	}
 
 	var name string
 
@@ -93,9 +94,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 var (
-  flagBind = flag.String("bind", "", "Address to bind. Format IP:PORT")
-  flagSize = flag.Int("size", 10, "Default final hostname size")
-  flagDebug = flag.Bool("d", false, "turn on debug info")
+	flagBind  = flag.String("bind", "", "Address to bind. Format IP:PORT")
+	flagSize  = flag.Int("size", 10, "Default final hostname size")
+	flagDebug = flag.Bool("d", false, "turn on debug info")
 )
 
 var log = logging.MustGetLogger("bapteme")

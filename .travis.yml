@@ -1,6 +1,19 @@
 language: go
-
+go_import_path: github.com/guilhem/bapteme
 go:
-  - 1.0
-  - 1.1
-  - tip
+- 1.8
+
+install: true
+script: go test -v $(go list ./... | grep -v vendor)
+
+before_deploy:
+- go get github.com/mitchellh/gox
+- gox -output="bin/{{.Dir}}_{{.OS}}_{{.Arch}}"
+deploy:
+  provider: releases
+  api_key:
+    secure: h3fzfyO4ZsAGhLDgrPEaIHt/7VjIvJxiMqcnqn+7cQyJEmrQeoBK/2Y2/QFfegWI3DPiLEnhtapZp7Ds3g8ofM1yFWd4bxG7GNpfNGlFXPa1/HFz9A+vLmbvEELysEdHyJtqVN55GROPPeooXGUoVFUV3jzrP37z0fQdQQGXtHg=
+  file: bin/*
+  file_glob: true
+  on:
+    repo: guilhem/bapteme
