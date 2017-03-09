@@ -1,0 +1,10 @@
+hash: d1d53cafa4adf867363d398630ee088387c5c2b49c5bb6dbe809d697fe01c37c
+updated: 2017-03-09T17:54:06.308562274+01:00
+imports:
+- name: github.com/dchest/uniuri
+  version: 8902c56451e9b58ff940bbe5fec35d5f9c04584a
+- name: github.com/mssola/user_agent
+  version: 85b2f5798558a46fc23443c596e781712f4b7792
+- name: github.com/op/go-logging
+  version: b2cb9fa56473e98db8caba80237377e83fe44db5
+testImports: []
