@@ -2,7 +2,9 @@ language: go
 go_import_path: github.com/guilhem/bapteme
 go:
 - 1.8
-- tip
+
+install:
+script: go test -v $(go list ./... | grep -v vendor)
 
 before_deploy:
 - go get github.com/mitchellh/gox
