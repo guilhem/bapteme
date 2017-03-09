@@ -1,8 +1,9 @@
 # bapteme
 
-[![Build Status](https://travis-ci.org/optiflows/bapteme.png)](https://travis-ci.org/optiflows/bapteme)
-[![Gobuild Download](http://gobuild.io/badge/github.com/optiflows/bapteme/download.png)](http://gobuild.io/github.com/optiflows/bapteme)
-[![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/optiflows/bapteme)
+[![Build Status](https://travis-ci.org/guilhem/bapteme.png)](https://travis-ci.org/guilhem/bapteme)
+[![Go Report Card](https://goreportcard.com/badge/github.com/guilhem/bapteme)](https://goreportcard.com/report/github.com/guilhem/bapteme)
+[![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/guilhem/bapteme)
+
 
 ## Description
 
@@ -62,16 +63,3 @@ name too long
 # HTTP 500
 # len(AZERTY) >> 2
 ```
-
-## Dev
-
-We are using [`gopm`](https://github.com/gpmgo/gopm) tool to manage vendoring.
-
-Just compile / [download](http://gobuild.io/download/github.com/gpmgo/gopm) gopm.
-
-### Build
-
-```shell
-$ gopm build
-```
-That's all folks!
